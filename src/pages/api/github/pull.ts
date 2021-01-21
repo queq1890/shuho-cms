@@ -86,22 +86,22 @@ const main = async ({
   });
 };
 
-const getOption = ({ newBranch }: { newBranch: string }) => {
+const getOption = ({
+  newBranch,
+  fileName,
+  markDown,
+}: {
+  newBranch: string;
+  fileName: string;
+  markDown: string;
+}) => {
   const option: Option = {
     owner: 'queq1890',
-    // repo: 'octokit-playground',
     repo: 'shuho',
     baseBranch: 'master',
     newBranch,
-    fileName: 'ttttt',
-    markDown: `---
-title: aaa
-publishedAt: 2021-01-21
-summary: aa
-tags: ['aaa']
----
-    
-aaa`,
+    fileName,
+    markDown,
     pullRequest: {
       title: newBranch,
       body: 'This PR is generated with shuho-cms.',
@@ -112,11 +112,18 @@ aaa`,
 };
 
 const pullHandler: NextApiHandler = async (req, res) => {
-  const { method } = req;
+  const {
+    method,
+    body: { newBranch, fileName, markDown },
+  } = req;
 
   switch (method) {
-    case 'GET': {
-      const option = getOption({ newBranch: `${Math.random()}` });
+    case 'POST': {
+      const option = getOption({
+        newBranch,
+        fileName,
+        markDown,
+      });
       await main(option);
 
       res.status(200).json({ ok: true });
@@ -126,7 +133,7 @@ const pullHandler: NextApiHandler = async (req, res) => {
     // Get data from your database
 
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['POST']);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 };

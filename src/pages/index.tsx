@@ -1,33 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { composeMarkDown } from 'utility/composeMarkdown';
-import useSWR from 'swr';
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-type FormData = {
-  title: string;
-  summary: string;
-  publishedAt: string;
-  tags: string;
-  body: string;
-};
+import { useSubmitPullRequest } from 'hooks/useSubmitPullRequest';
+import { PullReuqestFormData } from 'request/pullRequest';
 
 const Index = () => {
-  useSWR('/api/github/pull', fetcher);
+  const { submitPullRequest } = useSubmitPullRequest();
+  const { register, handleSubmit } = useForm<PullReuqestFormData>();
 
-  const { register, handleSubmit } = useForm<FormData>();
   const onSubmit = handleSubmit((data) => {
-    const md = composeMarkDown({
-      ...data,
-      publishedAt: new Date()
-        .toISOString()
-        .replace(/T.*/, '')
-        .split('-')
-        .join('-'),
-    });
-
-    console.log(md);
+    submitPullRequest(data);
   });
 
   return (
@@ -45,6 +26,16 @@ const Index = () => {
       <label htmlFor="tags">
         Tags
         <input id="tags" name="tags" ref={register} />
+      </label>
+
+      <label htmlFor="newBranch">
+        Branch name
+        <input id="newBranch" name="newBranch" ref={register} />
+      </label>
+
+      <label htmlFor="fileName">
+        File name
+        <input id="fileName" name="fileName" ref={register} />
       </label>
 
       <label htmlFor="body">
