@@ -5,7 +5,8 @@
   "author": "Yuji Matsumoto (queq1890) <yuji.matsumoto@sun-asterisk.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack serve --config webpack.dev.js",
+    "dev": "next",
+    "build": "next build",
     "format": "prettier --check '**/*.{ts,tsx}'",
     "format:fix": "prettier --write '**/*.{ts,tsx}'",
     "lint": "prettier './src/**/*.{ts,tsx}' --list-different && eslint './src/**/*.{ts,tsx}' --ignore-path .eslintignore",
@@ -40,6 +41,7 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
+    "next": "^10.0.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
