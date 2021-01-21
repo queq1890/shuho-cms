@@ -6,6 +6,8 @@ type Option = {
   repo: string;
   baseBranch: string;
   newBranch: string;
+  fileName: string;
+  markDown: string;
   pullRequest: {
     title: string;
     body: string;
@@ -22,6 +24,8 @@ const main = async ({
   repo,
   baseBranch,
   newBranch,
+  fileName,
+  markDown,
   pullRequest: { body, title },
   commitMessage = 'WIP',
 }: Option) => {
@@ -44,11 +48,24 @@ const main = async ({
     commit_sha: newBranchRef.data.object.sha,
   });
 
+  const newTree = await octokit.git.createTree({
+    owner,
+    repo,
+    base_tree: currentCommit.data.tree.sha,
+    tree: [
+      {
+        path: `contents/${fileName}.mdx`,
+        mode: '100644',
+        content: markDown,
+      },
+    ],
+  });
+
   const newCommit = await octokit.git.createCommit({
     owner,
     repo,
     message: commitMessage,
-    tree: currentCommit.data.tree.sha,
+    tree: newTree.data.sha,
     parents: [currentCommit.data.sha],
   });
 
@@ -72,10 +89,19 @@ const main = async ({
 const getOption = ({ newBranch }: { newBranch: string }) => {
   const option: Option = {
     owner: 'queq1890',
-    repo: 'octokit-playground',
-    // repo: 'shuho',
+    // repo: 'octokit-playground',
+    repo: 'shuho',
     baseBranch: 'master',
     newBranch,
+    fileName: 'ttttt',
+    markDown: `---
+title: aaa
+publishedAt: 2021-01-21
+summary: aa
+tags: ['aaa']
+---
+    
+aaa`,
     pullRequest: {
       title: newBranch,
       body: 'This PR is generated with shuho-cms.',
@@ -89,8 +115,8 @@ const pullHandler: NextApiHandler = async (req, res) => {
   const { method } = req;
 
   switch (method) {
-    case 'POST': {
-      const option = getOption({ newBranch: 'foo' });
+    case 'GET': {
+      const option = getOption({ newBranch: `${Math.random()}` });
       await main(option);
 
       res.status(200).json({ ok: true });
@@ -100,7 +126,7 @@ const pullHandler: NextApiHandler = async (req, res) => {
     // Get data from your database
 
     default:
-      res.setHeader('Allow', ['POST']);
+      res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 };

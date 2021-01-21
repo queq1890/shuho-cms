@@ -1,8 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { composeMarkDown } from 'utility/composeMarkdown';
-// import useSWR from 'swr';
-// const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 type FormData = {
   title: string;
@@ -13,6 +14,8 @@ type FormData = {
 };
 
 const Index = () => {
+  useSWR('/api/github/pull', fetcher);
+
   const { register, handleSubmit } = useForm<FormData>();
   const onSubmit = handleSubmit((data) => {
     const md = composeMarkDown({
