@@ -98,7 +98,7 @@ const getOption = ({
   const option: Option = {
     owner: 'queq1890',
     repo: 'shuho',
-    baseBranch: 'master',
+    baseBranch: 'main',
     newBranch,
     fileName,
     markDown,
