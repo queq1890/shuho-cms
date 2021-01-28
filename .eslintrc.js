@@ -43,7 +43,6 @@ module.exports = {
     'import',
     'jest',
     'jsx-a11y',
-    'prefer-arrow',
     'prettier',
     'react',
     'react-hooks',
@@ -90,15 +89,6 @@ module.exports = {
           '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
       },
     ],
-    // prefer-arrow
-    'prefer-arrow/prefer-arrow-functions': [
-      'error',
-      {
-        disallowPrototype: true,
-        singleReturnOnly: true,
-        classPropertiesAllowed: false,
-      },
-    ],
 
     // react
     'react/jsx-filename-extension': [
@@ -117,6 +107,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/display-name': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'react/destructuring-assignment': 'off',
 
     // react hooks
     'react-hooks/rules-of-hooks': 'error',
