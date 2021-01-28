@@ -6,11 +6,11 @@ type Props = {
   name: string;
 };
 
-const MDXFormInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
+const MDXFormInput = forwardRef<HTMLInputElement, Props>(({ name }, ref) => {
   return (
     <LabelWrapper>
-      <Label htmlFor={props.name}>{props.name}</Label>
-      <input id={props.name} ref={ref} />
+      <Label htmlFor={name}>{name}</Label>
+      <input id={name} name={name} ref={ref} />
     </LabelWrapper>
   );
 });

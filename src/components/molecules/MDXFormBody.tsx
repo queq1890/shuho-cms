@@ -1,19 +1,29 @@
-import { forwardRef } from 'react';
+import { ChangeEvent, forwardRef } from 'react';
 import styled from '@emotion/styled';
 import { fontSize, spacing } from 'constants/theme';
 
 type Props = {
   name: string;
+  format: () => void;
+  onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
-const MDXFormBody = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  return (
-    <LabelWrapper>
-      <Label htmlFor={props.name}>{props.name}</Label>
-      <Input id={props.name} ref={ref} />
-    </LabelWrapper>
-  );
-});
+const MDXFormBody = forwardRef<HTMLTextAreaElement, Props>(
+  ({ name, format, onChange }, ref) => {
+    return (
+      <LabelWrapper>
+        <Label htmlFor={name}>{name}</Label>
+        <TextArea
+          id={name}
+          ref={ref}
+          name={name}
+          onBlur={format}
+          onChange={onChange}
+        />
+      </LabelWrapper>
+    );
+  }
+);
 
 const LabelWrapper = styled('div')`
   display: flex;
@@ -27,8 +37,12 @@ const Label = styled('label')`
   margin-bottom: ${spacing.xs};
 `;
 
-const Input = styled('input')`
+const TextArea = styled('textarea')`
   height: 100%;
+
+  div {
+    height: 100%;
+  }
 `;
 
 export default MDXFormBody;

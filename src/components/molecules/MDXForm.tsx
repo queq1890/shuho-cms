@@ -1,7 +1,9 @@
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import styled from '@emotion/styled';
 import { PullReuqestFormData } from 'request/pullRequest';
 import { useForm } from 'react-hook-form';
+import { formatText } from 'utility/formatText';
+import { useSetPreviewContext } from 'contexts/previewContext';
 import MDXFormInput from './MDXFormInput';
 import MDXFormBody from './MDXFormBody';
 
@@ -10,11 +12,30 @@ type Props = {
 };
 
 const MDXForm: FC<Props> = ({ submitPullRequest }) => {
-  const { register, handleSubmit } = useForm<PullReuqestFormData>();
+  const setPreview = useSetPreviewContext();
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+  } = useForm<PullReuqestFormData>();
 
   const onSubmit = handleSubmit((data) => {
     submitPullRequest(data);
   });
+
+  const formatBody = () => {
+    const body = getValues('body');
+    if (body === undefined) return;
+
+    const formatted = formatText(body);
+    setValue('body', formatted);
+  };
+
+  const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setPreview(event.target.value);
+  };
 
   return (
     <Form onSubmit={onSubmit}>
@@ -24,7 +45,12 @@ const MDXForm: FC<Props> = ({ submitPullRequest }) => {
       <MDXFormInput name="tags" ref={register} />
       <MDXFormInput name="newBranch" ref={register} />
       <MDXFormInput name="fileName" ref={register} />
-      <MDXFormBody name="body" ref={register} />
+      <MDXFormBody
+        name="body"
+        ref={register}
+        format={formatBody}
+        onChange={onChange}
+      />
       <button type="submit">submit</button>
     </Form>
   );
