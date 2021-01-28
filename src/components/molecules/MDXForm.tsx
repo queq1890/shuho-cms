@@ -42,7 +42,6 @@ const MDXForm: FC<Props> = ({ submitPullRequest }) => {
       <MDXFormInput name="title" ref={register} />
       <MDXFormInput name="summary" ref={register} />
       <MDXFormInput name="tags" ref={register} />
-      <MDXFormInput name="tags" ref={register} />
       <MDXFormInput name="newBranch" ref={register} />
       <MDXFormInput name="fileName" ref={register} />
       <MDXFormBody
