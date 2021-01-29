@@ -1,18 +1,23 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { PullReuqestFormData } from 'request/pullRequest';
 import { useForm } from 'react-hook-form';
 import { formatText } from 'utility/formatText';
 import { useSetPreviewContext } from 'contexts/previewContext';
+import Snackbar from 'components/atoms/Snackbar';
 import MDXFormInput from './MDXFormInput';
-import MDXFormBody from './MDXFormBody';
+import MDXFormTextArea from './MDXFormTextArea';
 
 type Props = {
   submitPullRequest: (payload: PullReuqestFormData) => void;
 };
 
+// TODO: SnackBar 関係のstate を全てcontext に移す
+const SNACKBAR_TEXT = 'PR を作成しました';
+
 const MDXForm: FC<Props> = ({ submitPullRequest }) => {
   const setPreview = useSetPreviewContext();
+  const [open, setOpen] = useState(false); // TODO: SnackBar 関係のstate を全てcontext に移す
 
   const {
     register,
@@ -21,8 +26,20 @@ const MDXForm: FC<Props> = ({ submitPullRequest }) => {
     setValue,
   } = useForm<PullReuqestFormData>();
 
+  useEffect(() => {
+    const close = async () => {
+      if (open) {
+        await new Promise((resolve) => setTimeout(resolve, 4500));
+        setOpen(false);
+      }
+    };
+
+    close();
+  }, [open]);
+
   const onSubmit = handleSubmit((data) => {
     submitPullRequest(data);
+    setOpen(true);
   });
 
   const formatBody = () => {
@@ -44,13 +61,14 @@ const MDXForm: FC<Props> = ({ submitPullRequest }) => {
       <MDXFormInput name="tags" ref={register} />
       <MDXFormInput name="newBranch" ref={register} />
       <MDXFormInput name="fileName" ref={register} />
-      <MDXFormBody
+      <MDXFormTextArea
         name="body"
         ref={register}
         format={formatBody}
         onChange={onChange}
       />
       <button type="submit">submit</button>
+      <Snackbar text={SNACKBAR_TEXT} open={open} type="success" />
     </Form>
   );
 };
