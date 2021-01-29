@@ -8,7 +8,7 @@ type Props = {
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
-const MDXFormBody = forwardRef<HTMLTextAreaElement, Props>(
+const MDXFormTextArea = forwardRef<HTMLTextAreaElement, Props>(
   ({ name, format, onChange }, ref) => {
     return (
       <LabelWrapper>
@@ -33,7 +33,7 @@ const LabelWrapper = styled('div')`
 `;
 
 const Label = styled('label')`
-  font-size: ${fontSize.xs};
+  font-size: ${fontSize.sm};
   margin-bottom: ${spacing.xs};
 `;
 
@@ -45,4 +45,4 @@ const TextArea = styled('textarea')`
   }
 `;
 
-export default MDXFormBody;
+export default MDXFormTextArea;

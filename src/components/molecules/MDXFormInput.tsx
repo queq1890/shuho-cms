@@ -22,7 +22,7 @@ const LabelWrapper = styled('div')`
 `;
 
 const Label = styled('label')`
-  font-size: ${fontSize.xs};
+  font-size: ${fontSize.sm};
   margin-bottom: ${spacing.xs};
 `;
 
