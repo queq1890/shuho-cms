@@ -16,7 +16,7 @@ type Option = {
 };
 
 const octokit = new Octokit({
-  auth: process.env.SHUHO_TOKEN,
+  auth: process.env.GITHUB_TOKEN,
 });
 
 const main = async ({
@@ -96,9 +96,9 @@ const getOption = ({
   markDown: string;
 }) => {
   const option: Option = {
-    owner: 'queq1890',
-    repo: 'shuho',
-    baseBranch: 'main',
+    owner: process.env.GITHUB_REPO_OWNER as string,
+    repo: process.env.GITHUB_REPO as string,
+    baseBranch: process.env.GITHUB_REPO_BASE_BRANCH as string,
     newBranch,
     fileName,
     markDown,
